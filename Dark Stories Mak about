@@ -1,1 +1,82 @@
+import random
 
+# Define the game's variables and setup
+story = {
+    "1": {
+        "title": "The Abandoned House",
+        "description": "You find yourself wandering through an old abandoned house. The walls are crumbling, and it's clear that nobody has lived here in years. As you walk through the darkened halls, you hear strange noises and whispers that seem to be coming from all around you. You need to find your way out before it's too late.",
+        "clues": ["a torn photograph", "a blood-stained handprint"],
+        "suspects": ["the ghost of a former resident", "a deranged serial killer"],
+        "solution": "the serial killer who had been hiding in the house"
+    },
+    "2": {
+        "title": "The Missing Person",
+        "description": "Your friend has gone missing and the police have been unable to locate them. You take it upon yourself to investigate and find out what happened to your friend. As you follow the trail of clues, you discover a dark conspiracy involving a secret society and a sinister ritual.",
+        "clues": ["a mysterious symbol", "a bloodstained journal"],
+        "suspects": ["a high-ranking member of the secret society", "a rogue cultist"],
+        "solution": "the high-ranking member who orchestrated the ritual sacrifice"
+    }
+}
+
+health = 100
+clues_found = []
+suspects_encountered = []
+game_over = False
+
+# Define the game's functions
+def show_status():
+    print("You have", health, "health left.")
+    print("You have found the following clues:", clues_found)
+    print("You have encountered the following suspects:", suspects_encountered)
+
+def choose_story():
+    global current_story
+    story_ids = list(story.keys())
+    current_story = random.choice(story_ids)
+    print("You have chosen story", current_story)
+    print(story[current_story]["description"])
+
+def search_room():
+    global health
+    search_chance = random.randint(1, 10)
+    if search_chance <= 5:
+        print("You didn't find anything of interest.")
+    else:
+        clue = random.choice(story[current_story]["clues"])
+        print("You found a clue:", clue)
+        clues_found.append(clue)
+    health -= 10
+
+def encounter_suspect():
+    global health
+    suspect = random.choice(story[current_story]["suspects"])
+    print("You encounter", suspect)
+    suspects_encountered.append(suspect)
+    if suspect == story[current_story]["solution"]:
+        print("You have solved the mystery and won the game!")
+        game_over = True
+    else:
+        print("You have encountered the wrong suspect and lost some health.")
+        health -= 20
+
+def game_over_check():
+    global game_over
+    if health <= 0:
+        print("You have died! Game over.")
+        game_over = True
+
+# Start the game loop
+print("Welcome to the Dark Stories game!")
+choose_story()
+
+while not game_over:
+    show_status()
+    action = input("What would you like to do? (s)earch the room, (e)ncounter a suspect, or (q)uit? ")
+    if action == "s":
+        search_room()
+    elif action == "e":
+        encounter_suspect()
+    elif action == "q":
+        print("Thanks for playing!")
+        game_over = True
+    game_over_check()
