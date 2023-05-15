@@ -1,0 +1,55 @@
+import random
+
+# Define the game's variables and setup
+health = 100
+room_number = 1
+max_rooms = 5
+rooms_visited = [1]
+game_over = False
+
+# Define the game's functions
+def show_status():
+    print("You are in room", room_number, "and have", health, "health left.")
+
+def move_to_room():
+    global room_number
+    new_room = random.randint(1, 10)
+    if new_room in rooms_visited:
+        print("You've already been to this room!")
+    else:
+        room_number = new_room
+        rooms_visited.append(new_room)
+        print("You move to room", room_number)
+        encounter()
+
+def encounter():
+    global health
+    ghost_chance = random.randint(1, 10)
+    if ghost_chance <= 3:
+        print("A ghostly figure appears!")
+        health -= 20
+    else:
+        print("The room is empty.")
+    show_status()
+
+def game_over_check():
+    global game_over
+    if health <= 0:
+        print("You have died! Game over.")
+        game_over = True
+    elif room_number == max_rooms:
+        print("You have found your way out of the house! You win!")
+        game_over = True
+
+# Start the game loop
+print("Welcome to the Haunted House game!")
+while not game_over:
+    show_status()
+    move = input("What would you like to do? (m)ove or (q)uit? ")
+    if move == "m":
+        move_to_room()
+    elif move == "q":
+        print("Thanks for playing!")
+        game_over = True
+    game_over_check()
+
